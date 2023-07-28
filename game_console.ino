@@ -383,9 +383,9 @@ void screensaver(void) {
   u8g.firstPage();
   do {
     u8g.setFont(u8g_font_unifont);
-    u8g.drawStr(width / 2 - 50, 10, "PlayStation 5");
-    u8g.drawStr(width / 2 - 50, 30, "by SedunovSSS");
-    u8g.drawStr(width / 2 - 20, 50, _version);
+    u8g.drawStr(width / 2 - 50, 15, "PlayStation 5");
+    u8g.drawStr(width / 2 - 50, 35, "by SedunovSSS");
+    u8g.drawStr(width / 2 - 20, 55, _version);
   }
   while ( u8g.nextPage() );
   delay(1500);
