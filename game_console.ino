@@ -26,7 +26,7 @@ int dy = 0;
 uint8_t score = 0;
 
 const uint8_t xPos[] = {8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112};
-const uint8_t yPos[] = {8, 16, 24, 32, 40, 48};
+const uint8_t yPos[] = {8, 16, 24, 32, 40, 48, 56};
 
 uint8_t xFruit = xPos[random(0, sizeof(xPos))];
 uint8_t yFruit = yPos[random(0, sizeof(yPos))];
