@@ -407,10 +407,10 @@ void flappy_bird(void) {
     flappy_score++;
   }
 
-  if ((flappy_y - flappy_d < first_pipe_top_y + pipe_height || flappy_y + flappy_d > first_pipe_bottom_y) || (flappy_y - flappy_d < second_pipe_top_y + pipe_height || flappy_y + flappy_d > second_pipe_bottom_y)) {
-    if (flappy_x > first_pipe_x - pipe_width) {
+  if ((flappy_y < first_pipe_top_y + pipe_height || flappy_y + flappy_d > first_pipe_bottom_y) || (flappy_y < second_pipe_top_y + pipe_height || flappy_y + flappy_d > second_pipe_bottom_y)) {
+    if (flappy_x - flappy_d > first_pipe_x - pipe_width) {
 
-      delay(1500);
+      delay(1000);
 
       first_pipe_x = width / 2 - pipe_width;
       first_pipe_top_y = random(-pipe_height, 0);
