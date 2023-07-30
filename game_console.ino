@@ -491,7 +491,6 @@ void run_flappy_bird() {
     flappy_bird();
   }
   while ( u8g.nextPage() );
-  delay(40);
 }
 
 void menu(void) {
