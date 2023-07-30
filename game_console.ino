@@ -9,7 +9,9 @@ const uint8_t buttonRight = 3;
 const uint8_t buttonLeft = 5;
 const uint8_t buttonBack2Menu = 6;
 
-const char* _version = "1.0.4";
+const char* _version = "1.0.5";
+
+U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE | U8G_I2C_OPT_DEV_0);
 
 // snake variables
 
@@ -120,38 +122,12 @@ const uint8_t _map[map_width][map_height] {
   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 };
 
-// flappy variables
-
-const float flappy_x = 20;
-float flappy_y = 20;
-
-const uint8_t flappy_d = 4;
-
-const float fall_step = 0.5;
-const uint8_t up_step = 12;
-
-bool isJump = false;
-
-const uint8_t pipe_width = 8;
-const uint8_t pipe_height = 32;
-
-float first_pipe_x = width / 2 - pipe_width;
-float first_pipe_top_y = random(-pipe_height, 0);
-float first_pipe_bottom_y = first_pipe_top_y + pipe_height * 2 + 5;
-
-float second_pipe_x = width - pipe_width;
-float second_pipe_top_y = random(-pipe_height, 0);
-float second_pipe_bottom_y = second_pipe_top_y + pipe_height * 2 + 5;
-
-const float pipe_move_speed = 0.5;
-uint8_t flappy_score = 0;
-
 // menu variables
 
 uint8_t menu_state = 0;
 int8_t menu_select = 0;
 const uint8_t menu_length = 4;
-const char *menu_objects[menu_length] = {"SNAKE", "PING PONG", "RAY CAST", "FLAPPY BIRD"};
+const char *menu_objects[menu_length] = {"SNAKE", "PING PONG", "RAY CAST", "GOOGLE DINO"};
 const uint8_t menu_offset = 15;
 
 // load screen variables
@@ -212,7 +188,127 @@ const uint8_t piggis[] U8G_PROGMEM = {
 const uint8_t piggis_w = 7;
 const uint8_t piggis_h = sizeof(piggis)/piggis_w;
 
-U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE | U8G_I2C_OPT_DEV_0);
+// dino variables
+
+
+const uint8_t dino_run_1[] U8G_PROGMEM = { 
+    0x00, 0x00, 0x00, 
+    0x00, 0x1f, 0xe0, 
+    0x00, 0x17, 0xf0, 
+    0x00, 0x1f, 0xf0, 
+    0x00, 0x3f, 0xf0, 
+    0x00, 0x1f, 0xf0, 
+    0x00, 0x1e, 0x00, 
+    0x00, 0x7f, 0xc0, 
+    0x40, 0xfc, 0x00, 
+    0x61, 0xff, 0x00, 
+    0x73, 0xfe, 0x00, 
+    0x7f, 0xfe, 0x00, 
+    0x7f, 0xfe, 0x00, 
+    0x3f, 0xf8, 0x00, 
+    0x1f, 0xf0, 0x00, 
+    0x0f, 0xf0, 0x00, 
+    0x07, 0xc0, 0x00, 
+    0x03, 0x30, 0x00, 
+    0x02, 0x18, 0x00, 
+    0x03, 0x00, 0x00
+};
+
+const uint8_t dino_run_2[] U8G_PROGMEM = { 
+    0x00, 0x00, 0x00, 
+    0x00, 0x1f, 0xe0, 
+    0x00, 0x17, 0xf0, 
+    0x00, 0x1f, 0xf0, 
+    0x00, 0x3f, 0xf0, 
+    0x00, 0x1f, 0xf0, 
+    0x00, 0x1e, 0x00, 
+    0x00, 0x7f, 0xc0, 
+    0x40, 0xfc, 0x00, 
+    0x61, 0xff, 0x00, 
+    0x73, 0xfe, 0x00, 
+    0x7f, 0xfe, 0x00, 
+    0x7f, 0xfe, 0x00, 
+    0x3f, 0xf8, 0x00, 
+    0x1f, 0xf8, 0x00, 
+    0x0f, 0xf0, 0x00, 
+    0x06, 0x60, 0x00, 
+    0x03, 0x20, 0x00, 
+    0x03, 0x10, 0x00, 
+    0x00, 0x18, 0x00
+};
+
+const uint8_t cactus_big[] U8G_PROGMEM = { 
+    0x08, 0x00, 0x00, 0x83, 
+    0x0c, 0x0c, 0x01, 0xc3, 
+    0x1e, 0x0c, 0x01, 0xc3, 
+    0x0c, 0x0c, 0x0d, 0xc3, 
+    0x1c, 0x0d, 0x8d, 0xc3, 
+    0x4d, 0x8d, 0x0c, 0xdb, 
+    0xdc, 0x8c, 0x8d, 0xdb, 
+    0x4d, 0xaf, 0x0d, 0xdb, 
+    0xed, 0xad, 0x4f, 0xdb, 
+    0x5d, 0xac, 0x67, 0xdb, 
+    0xcc, 0xbc, 0xa9, 0xcb, 
+    0x7f, 0xad, 0x51, 0xf3, 
+    0x7e, 0x3d, 0x79, 0xc3, 
+    0x1c, 0x0d, 0x51, 0xc3, 
+    0x0c, 0x0c, 0xf1, 0xc3, 
+    0x0e, 0x0c, 0x40, 0xc3, 
+    0x1c, 0x0c, 0x61, 0xc3, 
+    0x0c, 0x0c, 0x41, 0xc3, 
+    0x1c, 0x0c, 0x61, 0xc3, 
+    0x00, 0x00, 0x00, 0x03
+};
+
+const uint8_t cactus_small[] U8G_PROGMEM = { 
+    0x03, 0x80, 
+    0x07, 0x80, 
+    0x67, 0x80, 
+    0xf7, 0x80, 
+    0xe7, 0x90, 
+    0xf7, 0x90, 
+    0xf7, 0xb0, 
+    0xe7, 0x10, 
+    0xf7, 0xf0, 
+    0xf7, 0xf0, 
+    0xe7, 0xe0, 
+    0xf7, 0x80, 
+    0x7f, 0x80, 
+    0x7f, 0x80, 
+    0x1f, 0x80, 
+    0x07, 0x80, 
+    0x07, 0x00, 
+    0x07, 0x80, 
+    0x07, 0x80, 
+    0x07, 0x80
+};
+
+const uint8_t dino_w = 3;
+const uint8_t dino_h = sizeof(dino_run_1)/dino_w;
+
+const uint8_t cactus_big_w = 4;
+const uint8_t cactus_big_h = sizeof(cactus_big)/cactus_big_w;
+
+const uint8_t cactus_small_w = 2;
+const uint8_t cactus_small_h = sizeof(cactus_small)/cactus_small_w;
+
+const uint8_t dino_x = 20;
+int8_t dino_y = height - dino_h - 10;
+
+bool isDino1 = true;
+bool isJump = false;
+int jumpCount = 20;
+const uint8_t dino_speed = 10;
+uint8_t dino_score = 0;
+
+int cactus_x = width / 2;
+int cactus_y = 55;
+
+bool cactusIsBig = false;
+
+int cactus_w;
+int cactus_h;
+uint8_t *cactus;
 
 void snake_logic(void) {
   uint8_t prevX = tailX[0];
@@ -431,66 +527,80 @@ void run_ray_cast(void) {
   } while ( u8g.nextPage() );
 }
 
-void flappy_bird(void) {
-  u8g.drawDisc(flappy_x, flappy_y, 4);
-  u8g.drawBox(first_pipe_x, first_pipe_top_y, pipe_width, pipe_height);
-  u8g.drawBox(first_pipe_x, first_pipe_bottom_y, pipe_width, pipe_height);
-  u8g.drawBox(second_pipe_x, second_pipe_top_y, pipe_width, pipe_height);
-  u8g.drawBox(second_pipe_x, second_pipe_bottom_y, pipe_width, pipe_height);
-  u8g.setFont(u8g_font_unifont);
-  u8g.drawStr(10, 10, String(flappy_score).c_str());
-  if (flappy_y < height - flappy_d) {
-    flappy_y += fall_step;
+void dino_logic(void){
+  if (!cactusIsBig){
+    cactus = cactus_small ;
+    cactus_w = cactus_small_w;
+    cactus_h = cactus_small_h;
   }
-  if (digitalRead(buttonUp) == 0 && flappy_y > 0 && !isJump) {
-    flappy_y -= up_step;
-    isJump = true;
+  else{
+    cactus = cactus_big ;
+    cactus_w = cactus_big_w;
+    cactus_h = cactus_big_h;
   }
-  if (digitalRead(buttonUp) == 1) {
+  isDino1 = !isDino1;
+  cactus_x -= dino_speed;
+  if (cactus_x < -cactus_w){
+    if (random(0, 2) == 0){
+    cactusIsBig = false;
+  }
+  else{
+    cactusIsBig = true;
+  }
+  cactus_x = width - cactus_w;
+  dino_score++;
+  }
+  if (dino_y == height - dino_h - 10 && cactus_x < dino_x + cactus_w){
+    delay(1000);
+    dino_y = height - dino_h - 10;
+    
+    isDino1 = true;
     isJump = false;
+    jumpCount = 20;
+    dino_score = 0;
+    
+    cactus_x = width - cactus_w;
+    cactus_y = 55;
   }
-  first_pipe_x -= pipe_move_speed;
-  if (first_pipe_x < - pipe_width) {
-    first_pipe_x = width - pipe_width;
-    first_pipe_top_y = random(-pipe_height, 0);
-    first_pipe_bottom_y = first_pipe_top_y + pipe_height * 2 + 5;
-    flappy_score++;
-  }
-  second_pipe_x -= pipe_move_speed;
-  if (second_pipe_x < - pipe_width) {
-    second_pipe_x = width - pipe_width;
-    second_pipe_top_y = random(-pipe_height, 0);
-    second_pipe_bottom_y = second_pipe_top_y + pipe_height * 2 + 5;
-    flappy_score++;
-  }
-
-  if ((flappy_y < first_pipe_top_y + pipe_height || flappy_y + flappy_d > first_pipe_bottom_y) || (flappy_y < second_pipe_top_y + pipe_height || flappy_y + flappy_d > second_pipe_bottom_y)) {
-    if (flappy_x - flappy_d > first_pipe_x - pipe_width) {
-
-      delay(1000);
-
-      first_pipe_x = width / 2 - pipe_width;
-      first_pipe_top_y = random(-pipe_height, 0);
-      first_pipe_bottom_y = first_pipe_top_y + pipe_height * 2 + 5;
-
-      second_pipe_x = width - pipe_width;
-      second_pipe_top_y = random(-pipe_height, 0);
-      second_pipe_bottom_y = second_pipe_top_y + pipe_height * 2 + 5;
-
-      flappy_y = 20;
-
-      flappy_score = 0;
-    }
-  }
-
 }
 
-void run_flappy_bird() {
-  u8g.firstPage();
+void dino(void){
+  u8g.setFont(u8g_font_unifont);
+   u8g.drawStr(10, 10, String(dino_score).c_str());
+    u8g.drawLine(0, 55, width, 55);
+    if (isDino1){
+      u8g.drawBitmapP(dino_x, dino_y, dino_w, dino_h, dino_run_1);
+    }
+    else{
+      u8g.drawBitmapP(dino_x, dino_y, dino_w, dino_h, dino_run_2);
+    }
+    if (digitalRead(buttonUp) == 0 && !isJump){
+      isJump = true;
+    }
+    if(isJump){
+        if(jumpCount >= -20){
+            if (jumpCount < 1)
+                dino_y += (jumpCount * jumpCount) / 60;
+            else
+                dino_y -= (jumpCount * jumpCount) / 60;
+            jumpCount -= 1;
+        }
+        else{
+            jumpCount = 20;
+            isJump = false;
+        }
+    }
+    u8g.drawBitmapP(cactus_x, cactus_y - cactus_h , cactus_w, cactus_small_h, cactus);
+}
+
+void run_dino(void){
+  dino_logic();
+  u8g.firstPage(); 
   do {
-    flappy_bird();
-  }
-  while ( u8g.nextPage() );
+    dino();
+  } while( u8g.nextPage() );
+  
+  delay(20);
 }
 
 void menu(void) {
@@ -541,7 +651,7 @@ void screensaver(void) {
 void load_screen(void){
   u8g.firstPage(); 
   do {
-    u8g.drawBitmapP( 128/2-piggis_h/2-5, 5, piggis_w, piggis_h, piggis);
+    u8g.drawBitmapP( width/2-piggis_h/2-5, 5, piggis_w, piggis_h, piggis);
   } while( u8g.nextPage() );
   delay(1000);
 }
@@ -565,7 +675,7 @@ void loop() {
   if (menu_state == 3)
     run_ray_cast();
   if (menu_state == 4)
-    run_flappy_bird();
+    run_dino();
   if (digitalRead(buttonBack2Menu) == 0) {
     menu_state = 0;
   }
