@@ -561,6 +561,12 @@ void dino_logic(void){
     
     cactus_x = width - cactus_w;
     cactus_y = 55;
+    if (random(0, 2) == 0) {
+      cactusIsBig = false;
+    }
+    else {
+      cactusIsBig = true;
+    }
   }
 }
 
