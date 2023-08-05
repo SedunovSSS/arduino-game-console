@@ -672,6 +672,8 @@ void setup(void) {
 }
 
 void loop() {
+  if (digitalRead(buttonBack2Menu) == 0)
+    menu_state = 0;
   if (menu_state == 0)
     menu();
   if (menu_state == 1)
@@ -682,7 +684,4 @@ void loop() {
     run_ray_cast();
   if (menu_state == 4)
     run_dino();
-  if (digitalRead(buttonBack2Menu) == 0) {
-    menu_state = 0;
-  }
 }
